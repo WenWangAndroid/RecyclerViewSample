@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RecyclerViewSample</string>
+
+    <string name="layoutManager">LayoutManager</string>
+    <string name="item_touch_helper">ItemTouchHelper</string>
+    <string name="snap_helper">SnapHelper</string>
+</resources>
