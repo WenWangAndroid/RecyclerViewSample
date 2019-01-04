@@ -24,7 +24,6 @@ class RecyclerViewActivity : AppCompatActivity() {
 
         val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         itemDecoration.setDrawable(resources.getDrawable(R.drawable.shape_divider_line_8dp))
-
         recyclerView.isNestedScrollingEnabled = false
 
         recyclerView.apply {

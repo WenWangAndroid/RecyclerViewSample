@@ -6,6 +6,7 @@ import android.support.v7.widget.*
 import cn.xhuww.recyclerview.adapter.ImageAdapter
 import cn.xhuww.recyclerview.AppResource
 import cn.xhuww.recyclerview.R
+import cn.xhuww.recyclerview.layoutmanager.LoopLayoutManager
 import kotlinx.android.synthetic.main.activity_recycle_view.*
 
 class ItemTouchHelperActivity : AppCompatActivity() {
@@ -20,7 +21,7 @@ class ItemTouchHelperActivity : AppCompatActivity() {
         val imageAdapter = ImageAdapter().apply {
             items = AppResource.urls
         }
-        val linearLayoutManager = LinearLayoutManager(this)
+        val linearLayoutManager = LoopLayoutManager()
 
         recyclerView.apply {
             adapter = imageAdapter
