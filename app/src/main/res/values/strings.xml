@@ -4,4 +4,6 @@
     <string name="layoutManager">LayoutManager</string>
     <string name="item_touch_helper">ItemTouchHelper</string>
     <string name="snap_helper">SnapHelper</string>
+
+    <string name="positive_content">想要飞的高，就该地平线忘掉 —— xxx图片上说的</string>
 </resources>
