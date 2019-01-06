@@ -25,7 +25,7 @@ object AppResource {
     val tags = arrayListOf(
         "recyclerview",
         "flexbox-layout",
-        "glide",
+        "Glide", "RxJava",
         "LinearLayoutManager",
         "GridLayoutManager",
         "StaggeredGridLayoutManager",

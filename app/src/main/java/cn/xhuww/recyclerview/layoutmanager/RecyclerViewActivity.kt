@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import cn.xhuww.recyclerview.AppResource
 import cn.xhuww.recyclerview.R
 import cn.xhuww.recyclerview.adapter.ImageRecycleAdapter
+import cn.xhuww.recyclerview.adapter.TextAdapter
+import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.activity_recycle_view.*
 
 class RecyclerViewActivity : AppCompatActivity() {
@@ -13,39 +16,40 @@ class RecyclerViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycle_view)
 
-        val dataList = ArrayList<Any>()
-        for (i in 0 until 10) {
-            if (i % 3 == 0)
-                dataList.add(R.mipmap.image)
-            else
-                dataList.add(resources.getString(R.string.positive_content))
-        }
+//        val dataList = ArrayList<Any>()
+//        for (i in 0 until 10) {
+//            if (i % 3 == 0)
+//                dataList.add(R.mipmap.image)
+//            else
+//                dataList.add(resources.getString(R.string.positive_content))
+//        }
+//
+//        val imageAdapter = ImageRecycleAdapter().apply {
+//            items = dataList
+//        }
+//        val linearLayoutManager = LinearLayoutManager(this)
+//        //添加分割线
+//        val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL)
+//        recyclerView.apply {
+//            layoutManager = linearLayoutManager
+//            adapter = imageAdapter
+//            addItemDecoration(itemDecoration)
+//        }
+        initView()
+    }
 
-        val imageAdapter = ImageRecycleAdapter().apply {
-            items = dataList
-        }
-        val linearLayoutManager = LinearLayoutManager(this)
-        //添加分割线
-        val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL)
+    private fun initView() {
+        val textAdapter = TextAdapter().apply { items = AppResource.tags }
+        val flexBoxLayoutManager = FlexboxLayoutManager(this)
+
+        val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        itemDecoration.setDrawable(resources.getDrawable(R.drawable.shape_divider_line_8dp))
+        recyclerView.isNestedScrollingEnabled = false
+
         recyclerView.apply {
-            layoutManager = linearLayoutManager
-            adapter = imageAdapter
+            layoutManager = flexBoxLayoutManager
+            adapter = textAdapter
             addItemDecoration(itemDecoration)
         }
     }
 }
-
-//private fun initView() {
-//    val textAdapter = TextAdapter().apply { items = AppResource.tags }
-//    val flexBoxLayoutManager = FlexboxLayoutManager(this)
-//
-//    val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-//    itemDecoration.setDrawable(resources.getDrawable(R.drawable.shape_divider_line_8dp))
-//    recyclerView.isNestedScrollingEnabled = false
-//
-//    recyclerView.apply {
-//        layoutManager = flexBoxLayoutManager
-//        adapter = textAdapter
-//        addItemDecoration(itemDecoration)
-//    }
-//}
