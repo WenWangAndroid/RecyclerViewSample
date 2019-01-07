@@ -2,11 +2,10 @@ package cn.xhuww.recyclerview.touchhelper
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.*
 import cn.xhuww.recyclerview.adapter.ImageAdapter
 import cn.xhuww.recyclerview.AppResource
 import cn.xhuww.recyclerview.R
-import cn.xhuww.recyclerview.layoutmanager.LoopLayoutManager
+import cn.xhuww.recyclerview.layoutmanager.HorizontalLayoutManager
 import kotlinx.android.synthetic.main.activity_recycle_view.*
 
 class ItemTouchHelperActivity : AppCompatActivity() {
@@ -21,12 +20,11 @@ class ItemTouchHelperActivity : AppCompatActivity() {
         val imageAdapter = ImageAdapter().apply {
             items = AppResource.urls
         }
-        val linearLayoutManager = LoopLayoutManager()
+        val linearLayoutManager = HorizontalLayoutManager()
 
         recyclerView.apply {
             adapter = imageAdapter
             layoutManager = linearLayoutManager
-            isNestedScrollingEnabled = false
         }
     }
 }

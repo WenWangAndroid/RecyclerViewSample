@@ -22,7 +22,8 @@ class ImageAdapter : BaseAdapter<String, ImageAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun showImage(imageUrl: String) {
-            Glide.with(itemView.context).load(imageUrl).into(itemView.imageView)
+//            Glide.with(itemView.context).load(imageUrl).into(itemView.imageView)
+            itemView.imageView.setImageResource(R.mipmap.image)
         }
     }
 }
