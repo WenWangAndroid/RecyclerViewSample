@@ -3,10 +3,8 @@ package cn.xhuww.recyclerview.layoutmanager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import cn.xhuww.recyclerview.AppResource
 import cn.xhuww.recyclerview.R
-import cn.xhuww.recyclerview.adapter.ImageRecycleAdapter
 import cn.xhuww.recyclerview.adapter.TextAdapter
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.activity_recycle_view.*
@@ -43,7 +41,7 @@ class RecyclerViewActivity : AppCompatActivity() {
         val flexBoxLayoutManager = FlexboxLayoutManager(this)
 
         val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        itemDecoration.setDrawable(resources.getDrawable(R.drawable.shape_divider_line_8dp))
+        itemDecoration.setDrawable(resources.getDrawable(R.drawable.shape_divider_line_vertical_8dp))
         recyclerView.isNestedScrollingEnabled = false
 
         recyclerView.apply {

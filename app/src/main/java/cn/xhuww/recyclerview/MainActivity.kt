@@ -2,6 +2,7 @@ package cn.xhuww.recyclerview
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import cn.xhuww.recyclerview.itemdecoration.ItemDecorationActivity
 import cn.xhuww.recyclerview.layoutmanager.LayoutManagerActivity
 import cn.xhuww.recyclerview.layoutmanager.RecyclerViewActivity
 import cn.xhuww.recyclerview.touchhelper.ItemTouchHelperActivity
@@ -28,6 +29,10 @@ class MainActivity : AppCompatActivity() {
 
         btnSnapHelper.setOnClickListener {
             startActivity(LayoutManagerActivity::class.java)
+        }
+
+        btnItemDecoration.setOnClickListener {
+            startActivity(ItemDecorationActivity::class.java)
         }
     }
 }

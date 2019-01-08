@@ -18,7 +18,7 @@ class ItemTouchHelperActivity : AppCompatActivity() {
 
     private fun initView() {
         val imageAdapter = ImageAdapter().apply {
-            items = AppResource.urls
+//            items = AppResource.urls
         }
         val linearLayoutManager = HorizontalLayoutManager()
 
