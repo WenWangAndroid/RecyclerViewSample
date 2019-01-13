@@ -21,6 +21,7 @@ class LayoutManagerActivity : AppCompatActivity() {
             items = dataList
         }
 
+
         val linearLayoutManager = LinearLayoutManager(this)
 //        val linearLayoutManager =  LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true)
 //        val linearLayoutManager =  LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -32,7 +33,7 @@ class LayoutManagerActivity : AppCompatActivity() {
 //        val staggeredGridLayoutManager =
 //            StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.HORIZONTAL)
         recyclerView.apply {
-            layoutManager = gridLayoutManager as RecyclerView.LayoutManager?
+            layoutManager = HorizontalLayoutManager()
             adapter = imageTextAdapter
         }
     }
