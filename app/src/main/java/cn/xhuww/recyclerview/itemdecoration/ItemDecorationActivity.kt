@@ -20,11 +20,10 @@ class ItemDecorationActivity : AppCompatActivity() {
 
         val map = HashMap<Int, String>()
         //每隔2个位置绘制分割线
-        (0..20 step 2).map { map.put(it, it.toString()) }
         //添加高度为8dp的分割线
         val itemDecoration = SuspendItemDecoration(this).apply {
-            dividerDrawable = resources.getDrawable(R.drawable.shape_divider_line_vertical_8dp)
-            dividerData = map
+            divider = resources.getDrawable(R.drawable.shape_divider_line_vertical_8dp)
+            dividerData = (0..20).map { "第${it / 2}组" }
         }
 
         recyclerView.apply {
