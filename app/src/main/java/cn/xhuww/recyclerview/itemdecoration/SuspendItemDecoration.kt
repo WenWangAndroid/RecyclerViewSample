@@ -15,11 +15,11 @@ import cn.xhuww.recyclerview.utils.sp2px
 
 class SuspendItemDecoration(val context: Context) : RecyclerView.ItemDecoration() {
 
-    var divider: Drawable? = null
-    //分割线的展示 position 与 文本内容
-    var dividerData: List<String>? = null
-    val bounds = Rect()
+    var dividerDrawable: Drawable? = null       //普通Item间的分割线
+    var groupDividerDrawable: Drawable? = null  //每组之间的分割线
+    var contacts: List<Contact>? = null         //联系人数据
 
+    private val bounds = Rect()
     private val textPaint: TextPaint
     @ColorRes
     var textColor: Int = android.R.color.white
@@ -40,8 +40,9 @@ class SuspendItemDecoration(val context: Context) : RecyclerView.ItemDecoration(
         }
 
     init {
+        //系统默认的分割线
         val tapeArray = context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
-        divider = tapeArray.getDrawable(0)
+        dividerDrawable = tapeArray.getDrawable(0)
         tapeArray.recycle()
 
         textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
@@ -51,10 +52,11 @@ class SuspendItemDecoration(val context: Context) : RecyclerView.ItemDecoration(
         textPaint.typeface = textTypeface
     }
 
-    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        super.onDraw(canvas, parent, state)
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        super.onDraw(c, parent, state)
+        val list = contacts ?: return
 
-        canvas.save()
+        c.save()
 
         val left = parent.paddingLeft
         val right = parent.width - parent.paddingRight
@@ -64,99 +66,111 @@ class SuspendItemDecoration(val context: Context) : RecyclerView.ItemDecoration(
             val params = child.layoutParams as RecyclerView.LayoutParams
             val position = params.viewLayoutPosition
 
-            if (!shouldDrawDecoration(position)) {
-                continue
+            val currentInitial = list[position].initial
+            val lastInitial = if (position >= 1) {
+                list[position - 1].initial
+            } else {
+                null
             }
 
-            val content = dividerData!![position]
+            var isDrawText = false
+            parent.getDecoratedBoundsWithMargins(child, bounds)
+            val drawable = if (currentInitial == lastInitial) {
+                dividerDrawable
+            } else {
+                isDrawText = true
+                groupDividerDrawable
+            }
 
             //绘制分割线
-            parent.getDecoratedBoundsWithMargins(child, bounds)
-            val dividerTop = bounds.top
-            val dividerBottom = dividerTop + divider!!.intrinsicHeight
-            divider!!.setBounds(left, dividerTop, right, dividerBottom)
-            divider!!.draw(canvas)
-
-            //绘制分割线上的文本
-            textPaint.getTextBounds(content, 0, content.length, bounds)
-            val textX = child.paddingLeft.toFloat()
-            val textY = (child.top - (divider!!.intrinsicHeight - bounds.height()) / 2).toFloat()
-            canvas.drawText(content, textX, textY, textPaint)
+            val top = bounds.top
+            val bottom = top + (drawable?.intrinsicHeight ?: 0)
+            drawable?.setBounds(left, top, right, bottom)
+            drawable?.draw(c)
+            //绘制文本内容
+            if (isDrawText) {
+                drawable ?: return
+                textPaint.getTextBounds(currentInitial, 0, currentInitial.length, bounds)
+                val textX = child.paddingLeft.toFloat()
+                val textY = (child.top - (drawable.intrinsicHeight - bounds.height()) / 2).toFloat()
+                c.drawText(currentInitial, textX, textY, textPaint)
+            }
         }
-        canvas.restore()
+        c.restore()
     }
 
-    override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        super.onDrawOver(canvas, parent, state)
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        super.onDrawOver(c, parent, state)
 
-        val divider = divider ?: return
-        val list = dividerData ?: return
+        val list = contacts ?: return
+        val drawable = groupDividerDrawable ?: return
 
-        val position = (parent.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        //只判断layoutManager为LinearLayoutManager的情况，其他情况的不做处理
+        val layoutManager = parent.layoutManager as? LinearLayoutManager ?: return
+
+        val position = layoutManager.findFirstVisibleItemPosition()
         if (position < 0 || position > list.size - 1) {
             return
         }
 
-        canvas.save()
-
         val child = parent.findViewHolderForLayoutPosition(position)!!.itemView
 
-        val currentContent = list[position]
-        if (position + 1 < list.size) {
-            val nextContent = list[position + 1]
-            if (child.top + child.height < divider.intrinsicHeight && currentContent != nextContent) {
-                canvas.translate(0f, (child.height + child.top - divider.intrinsicHeight).toFloat())
+        val currentInitial = list[position].initial
+        val nextInitial = if (position + 1 < list.size) {
+            list[position + 1].initial
+        } else {
+            null
+        }
+
+        parent.getDecoratedBoundsWithMargins(child, bounds)
+
+        c.save()
+        if (currentInitial != nextInitial) {
+            //顶部移出效果
+            if (child.top + child.height < drawable.intrinsicHeight) {
+                c.translate(0f, (child.height + child.top - drawable.intrinsicHeight).toFloat())
             }
         }
 
         val left = parent.paddingLeft
         val top = parent.paddingTop
         val right = parent.right - parent.paddingRight
-        val bottom = parent.paddingTop + divider.intrinsicHeight
+        val bottom = parent.paddingTop + drawable.intrinsicHeight
 
-        divider.setBounds(left, top, right, bottom)
-        divider.draw(canvas)
+        drawable.setBounds(left, top, right, bottom)
+        drawable.draw(c)
 
-        //绘制分割线上的文本
-        textPaint.getTextBounds(currentContent, 0, currentContent.length, bounds)
+        textPaint.getTextBounds(currentInitial, 0, currentInitial.length, bounds)
         val textX = child.paddingLeft.toFloat()
         val textY =
-            (parent.paddingTop + divider.intrinsicHeight - (divider.intrinsicHeight - bounds.height()) / 2).toFloat()
-        canvas.drawText(currentContent, textX, textY, textPaint)
-
-        canvas.restore()
+            (parent.paddingTop + drawable.intrinsicHeight - (drawable.intrinsicHeight - bounds.height()) / 2).toFloat()
+        c.drawText(currentInitial, textX, textY, textPaint)
+        c.restore()
     }
 
-    override fun getItemOffsets(
-        outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-    ) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
+        outRect.set(0, 0, 0, 0)
+        val list = contacts ?: return
 
         val position = (view.layoutParams as RecyclerView.LayoutParams).viewLayoutPosition
 
-        if (shouldDrawDecoration(position)) {
-            outRect.set(0, divider!!.intrinsicHeight, 0, 0)
-        }
-    }
-
-    private fun shouldDrawDecoration(position: Int): Boolean {
-        divider ?: return false
-
-        val list = dividerData ?: return false
-
-        if (position < 0 || position > list.size - 1) {
-            return false
+        val currentInitial = list[position].initial
+        val lastInitial = if (position >= 1) {
+            list[position - 1].initial
+        } else {
+            null
         }
 
-        val content = list[position]
-        if (content.isEmpty()) {
-            return false
+        //当前首字母与上一个首字母相同 则属于同一组，使用 dividerDrawable
+        val drawable = if (currentInitial == lastInitial) {
+            dividerDrawable
+        } else {
+            groupDividerDrawable
         }
 
-        if (position == 0) {
-            return true
-        }
-
-        return (position > 0 && content != list[position - 1])
+        val height = drawable?.intrinsicHeight ?: 0
+        //设置Item的上下左右偏移
+        outRect.set(0, height, 0, 0)
     }
 }

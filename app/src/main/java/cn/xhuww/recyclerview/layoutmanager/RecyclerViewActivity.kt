@@ -41,7 +41,7 @@ class RecyclerViewActivity : AppCompatActivity() {
         val flexBoxLayoutManager = FlexboxLayoutManager(this)
 
         val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        itemDecoration.setDrawable(resources.getDrawable(R.drawable.shape_divider_line_vertical_8dp))
+        itemDecoration.setDrawable(resources.getDrawable(R.drawable.shape_divider_line_vertical_red_45dp))
         recyclerView.isNestedScrollingEnabled = false
 
         recyclerView.apply {

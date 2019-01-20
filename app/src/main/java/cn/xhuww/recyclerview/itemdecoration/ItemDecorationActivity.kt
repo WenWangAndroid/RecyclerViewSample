@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.*
 import cn.xhuww.recyclerview.R
-import cn.xhuww.recyclerview.adapter.ImageAdapter
+import cn.xhuww.recyclerview.adapter.ContactAdapter
 import kotlinx.android.synthetic.main.activity_recycle_view.*
 
 class ItemDecorationActivity : AppCompatActivity() {
@@ -13,22 +13,23 @@ class ItemDecorationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycle_view)
 
-        val linearLayoutManager = LinearLayoutManager(this)
-        val imageAdapter = ImageAdapter().apply {
-            items = (0..20).map { R.mipmap.image }
+        val list = (325..454).map {
+            val ascii = it / 5
+            Contact(ascii.toChar().toString(), "${ascii.toChar()} $it")
         }
 
-        val map = HashMap<Int, String>()
-        //每隔2个位置绘制分割线
-        //添加高度为8dp的分割线
         val itemDecoration = SuspendItemDecoration(this).apply {
-            divider = resources.getDrawable(R.drawable.shape_divider_line_vertical_8dp)
-            dividerData = (0..20).map { "第${it / 2}组" }
+            dividerDrawable = resources.getDrawable(R.drawable.shape_divider_line_vertical_red_2dp)
+            groupDividerDrawable = resources.getDrawable(R.drawable.shape_divider_line_vertical_red_45dp)
+            contacts = list
         }
+
+        val linearLayoutManager = LinearLayoutManager(this)
+        val contactAdapter = ContactAdapter().apply { items = list }
 
         recyclerView.apply {
             layoutManager = linearLayoutManager
-            adapter = imageAdapter
+            adapter = contactAdapter
             addItemDecoration(itemDecoration)
         }
     }
@@ -58,7 +59,7 @@ class ItemDecorationActivity : AppCompatActivity() {
 //
 //            R.id.vertical_decoration -> {
 //                (itemDecoration as DividerItemDecoration).apply {
-//                    setDrawable(resources.getDrawable(R.drawable.shape_divider_line_vertical_8dp))
+//                    setDrawable(resources.getDrawable(R.drawable.shape_divider_line_vertical_red_45dp))
 //                    setOrientation(DividerItemDecoration.VERTICAL)
 //                }
 //                recyclerView.replaceItemDecoration(itemDecoration)
@@ -66,7 +67,7 @@ class ItemDecorationActivity : AppCompatActivity() {
 //
 //            R.id.custom_decoration -> {
 //                (itemDecoration as DividerItemDecoration).setDrawable(
-//                    resources.getDrawable(R.drawable.shape_divider_line_vertical_8dp)
+//                    resources.getDrawable(R.drawable.shape_divider_line_vertical_red_45dp)
 //                )
 //                recyclerView.replaceItemDecoration(itemDecoration)
 //            }
