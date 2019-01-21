@@ -31,5 +31,8 @@
         <activity
             android:name=".itemdecoration.ItemDecorationActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".snaphelper.SnapHelperActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

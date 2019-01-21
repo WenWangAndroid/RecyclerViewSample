@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import cn.xhuww.recyclerview.itemdecoration.ItemDecorationActivity
 import cn.xhuww.recyclerview.layoutmanager.LayoutManagerActivity
-import cn.xhuww.recyclerview.layoutmanager.RecyclerViewActivity
+import cn.xhuww.recyclerview.snaphelper.SnapHelperActivity
 import cn.xhuww.recyclerview.touchhelper.ItemTouchHelperActivity
 import cn.xhuww.recyclerview.utils.startActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
         btnLayoutManager.setOnClickListener {
-            startActivity(RecyclerViewActivity::class.java)
+            startActivity(LayoutManagerActivity::class.java)
         }
 
         btnItemTouchHelper.setOnClickListener {
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnSnapHelper.setOnClickListener {
-            startActivity(LayoutManagerActivity::class.java)
+            startActivity(SnapHelperActivity::class.java)
         }
 
         btnItemDecoration.setOnClickListener {

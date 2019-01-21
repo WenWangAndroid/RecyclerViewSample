@@ -14,7 +14,7 @@ class ImageTextAdapter : BaseAdapter<String, ImageTextAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.recycle_item_image_text_vertical, parent, false)
-        Log.i("TAG", "-------------createViewCount：${++createViewCount}")
+//        Log.i("TAG", "-------------createViewCount：${++createViewCount}")
         return ViewHolder(view)
     }
 

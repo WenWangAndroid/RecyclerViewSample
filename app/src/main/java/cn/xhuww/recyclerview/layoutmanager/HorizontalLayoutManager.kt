@@ -1,10 +1,22 @@
 package cn.xhuww.recyclerview.layoutmanager
 
+import android.graphics.PointF
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 
-class HorizontalLayoutManager : RecyclerView.LayoutManager() {
+class HorizontalLayoutManager : RecyclerView.LayoutManager(),
+    RecyclerView.SmoothScroller.ScrollVectorProvider {
+
+    override fun computeScrollVectorForPosition(targetPosition: Int): PointF? {
+        if (childCount == 0) {
+            return null
+        }
+        val firstChildPos = getPosition(getChildAt(0)!!)
+        val direction = if (targetPosition < firstChildPos) -1 else 1
+        return PointF(direction.toFloat(), 0f)
+    }
+
     override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
         return RecyclerView.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
@@ -52,56 +64,61 @@ class HorizontalLayoutManager : RecyclerView.LayoutManager() {
         return dx
     }
 
-    //为什么大多文章都定义方法名为fill? 我想是因为Android提供的3个LayoutManager都用的此方法名吧
     private fun fill(dx: Int, recycler: RecyclerView.Recycler) {
         //左滑
         if (dx > 0) {
-            //得到当前已添加（可见）的最后一个子View
-            val lastVisibleView = getChildAt(childCount - 1) ?: return
 
-            //如果滑动过后，View还是未完全显示出来就 不进行绘制下一个View
-            if (lastVisibleView.right - dx > width) return
+            while (true) {
+                //得到当前已添加（可见）的最后一个子View
+                val lastVisibleView = getChildAt(childCount - 1) ?: break
 
-            //得到View对应的位置
-            val layoutPosition = getPosition(lastVisibleView)
-            /**
-             * 例如要显示20个View，当前可见的最后一个View就是第20个，那么下一个要显示的就是第一个
-             * 如果当前显示的View不是第20个，那么就显示下一个，如当前显示的是第15个View，那么下一个显示第16个
-             * 注意区分 childCount 与 itemCount
-             */
-            val nextView: View = if (layoutPosition == itemCount - 1) {
-                recycler.getViewForPosition(0)
-            } else {
-                recycler.getViewForPosition(layoutPosition + 1)
+                //如果滑动过后，View还是未完全显示出来就 不进行绘制下一个View
+                if (lastVisibleView.right - dx > width)
+                    break
+
+                //得到View对应的位置
+                val layoutPosition = getPosition(lastVisibleView)
+                /**
+                 * 例如要显示20个View，当前可见的最后一个View就是第20个，那么下一个要显示的就是第一个
+                 * 如果当前显示的View不是第20个，那么就显示下一个，如当前显示的是第15个View，那么下一个显示第16个
+                 * 注意区分 childCount 与 itemCount
+                 */
+                val nextView: View = if (layoutPosition == itemCount - 1) {
+                    recycler.getViewForPosition(0)
+                } else {
+                    recycler.getViewForPosition(layoutPosition + 1)
+                }
+
+                addView(nextView)
+                measureChildWithMargins(nextView, 0, 0)
+                val viewWidth = getDecoratedMeasuredWidth(nextView)
+                val viewHeight = getDecoratedMeasuredHeight(nextView)
+                val offsetX = lastVisibleView.right
+                layoutDecorated(nextView, offsetX, 0, offsetX + viewWidth, viewHeight)
             }
-
-            addView(nextView)
-            measureChildWithMargins(nextView, 0, 0)
-            val viewWidth = getDecoratedMeasuredWidth(nextView)
-            val viewHeight = getDecoratedMeasuredHeight(nextView)
-            val offsetX = lastVisibleView.right
-            layoutDecorated(nextView, offsetX, 0, offsetX + viewWidth, viewHeight)
         } else { //右滑
-            val firstVisibleView = getChildAt(0) ?: return
+            while (true) {
+                val firstVisibleView = getChildAt(0) ?: break
 
-            if (firstVisibleView.left - dx < 0) return
+                if (firstVisibleView.left - dx < 0) break
 
-            val layoutPosition = getPosition(firstVisibleView)
-            /**
-             * 如果当前第一个可见View为第0个，则左侧显示第20个View 如果不是，下一个就显示前一个
-             */
-            val nextView = if (layoutPosition == 0) {
-                recycler.getViewForPosition(itemCount - 1)
-            } else {
-                recycler.getViewForPosition(layoutPosition - 1)
+                val layoutPosition = getPosition(firstVisibleView)
+                /**
+                 * 如果当前第一个可见View为第0个，则左侧显示第20个View 如果不是，下一个就显示前一个
+                 */
+                val nextView = if (layoutPosition == 0) {
+                    recycler.getViewForPosition(itemCount - 1)
+                } else {
+                    recycler.getViewForPosition(layoutPosition - 1)
+                }
+
+                addView(nextView, 0)
+                measureChildWithMargins(nextView, 0, 0)
+                val viewWidth = getDecoratedMeasuredWidth(nextView)
+                val viewHeight = getDecoratedMeasuredHeight(nextView)
+                val offsetX = firstVisibleView.left
+                layoutDecorated(nextView, offsetX - viewWidth, 0, offsetX, viewHeight)
             }
-
-            addView(nextView, 0)
-            measureChildWithMargins(nextView, 0, 0)
-            val viewWidth = getDecoratedMeasuredWidth(nextView)
-            val viewHeight = getDecoratedMeasuredHeight(nextView)
-            val offsetX = firstVisibleView.left
-            layoutDecorated(nextView, offsetX - viewWidth, 0, offsetX, viewHeight)
         }
     }
 
