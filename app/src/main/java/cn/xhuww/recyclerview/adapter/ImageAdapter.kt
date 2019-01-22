@@ -10,11 +10,36 @@ import kotlinx.android.synthetic.main.recycle_item_image.view.*
 
 class ImageAdapter : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
-    var items: List<Int> = ArrayList()
+    var items: ArrayList<Int> = ArrayList()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    fun addData(@DrawableRes res: Int) {
+        items.add(res)
+        notifyItemInserted(items.size - 1)
+    }
+
+    fun insertData(@DrawableRes res: Int, position: Int) {
+        if (outOfSize(position)) return
+        items.add(position, res)
+        notifyItemInserted(position)
+    }
+
+    fun removeData(position: Int) {
+        if (outOfSize(position)) return
+        items.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun updateData(@DrawableRes res: Int, position: Int) {
+        if (outOfSize(position)) return
+        items[position] = res
+        notifyItemChanged(position)
+    }
+
+    private fun outOfSize(position: Int): Boolean = position < 0 || position >= items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)

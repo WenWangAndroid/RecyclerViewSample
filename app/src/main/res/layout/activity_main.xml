@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
     <Button
         android:id="@+id/btnLayoutManager"
         android:layout_width="match_parent"
@@ -43,4 +42,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/item_decoration" />
+
+    <Button
+        android:id="@+id/btnItemAnimator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:text="@string/item_animator" />
 </LinearLayout>

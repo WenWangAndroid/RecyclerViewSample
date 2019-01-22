@@ -37,7 +37,7 @@ class ItemDecorationActivity : AppCompatActivity() {
 
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.item_decoration_handle, menu)
+//        menuInflater.inflate(R.menu.item_animator, menu)
 //        return true
 //    }
 
