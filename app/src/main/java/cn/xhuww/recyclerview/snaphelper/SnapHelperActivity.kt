@@ -2,6 +2,7 @@ package cn.xhuww.recyclerview.snaphelper
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import cn.xhuww.recyclerview.R
 import cn.xhuww.recyclerview.adapter.ImageAdapter
 import cn.xhuww.recyclerview.layoutmanager.HorizontalLayoutManager
@@ -22,9 +23,9 @@ class SnapHelperActivity : AppCompatActivity() {
         }
 
         ViewPagerSnapHelper().attachToRecyclerView(recyclerView)
-
+        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.apply {
-            layoutManager = HorizontalLayoutManager()
+            layoutManager = linearLayoutManager
             adapter = imageAdapter
         }
     }

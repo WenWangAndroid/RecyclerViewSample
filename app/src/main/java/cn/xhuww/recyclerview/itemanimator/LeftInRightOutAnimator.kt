@@ -1,21 +1,24 @@
 package cn.xhuww.recyclerview.itemanimator
 
-import android.support.v4.view.ViewCompat
-import android.support.v4.view.ViewPropertyAnimatorListener
 import android.support.v7.widget.RecyclerView
+import android.view.ViewPropertyAnimator
 
-class LeftInRightOutAnimator : BaseItemAnimator() {
-    override fun animateRemoveImpl(holder: RecyclerView.ViewHolder) {
-        ViewCompat.animate(holder.itemView)
-            .rotationY(-90F)
-            .setDuration(removeDuration)
-            .start()
+class LeftInRightOutAnimator : CommonItemAnimator() {
+
+    override fun prepareAnimateAddImpl(viewHolder: RecyclerView.ViewHolder) {
+        val view = viewHolder.itemView
+        view.translationX = -view.width.toFloat()
     }
 
-    override fun animateAddImpl(holder: RecyclerView.ViewHolder) {
-        ViewCompat.animate(holder.itemView)
-            .rotationY(0F)
-            .setDuration(addDuration)
-            .start()
+    override fun animateAddImpl(
+        viewHolder: RecyclerView.ViewHolder, animation: ViewPropertyAnimator
+    ) {
+        animation.alpha(1F).translationX(0F)
+    }
+
+    override fun animateRemoveImpl(
+        viewHolder: RecyclerView.ViewHolder, animation: ViewPropertyAnimator
+    ) {
+        animation.translationX(-viewHolder.itemView.width.toFloat())
     }
 }
