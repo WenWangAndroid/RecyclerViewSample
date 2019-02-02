@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import cn.xhuww.recyclerview.itemanimator.ItemAnimatorFragment;
+import cn.xhuww.recyclerview.touchhelper.ItemTouchHelperFragment;
 
 public class RecyclerViewActivity extends AppCompatActivity {
     private static final String KEY_TYPE = "KEY_TYPE";
@@ -54,6 +55,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 case AppConstant.snap_helper:
                     break;
                 case AppConstant.item_touch_helper:
+                    fragment = new ItemTouchHelperFragment();
                     break;
                 case AppConstant.item_animator:
                     fragment = new ItemAnimatorFragment();
