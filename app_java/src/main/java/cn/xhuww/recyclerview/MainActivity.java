@@ -1,8 +1,11 @@
 package cn.xhuww.recyclerview;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import cn.xhuww.recyclerview.tree.TreeListShowActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -16,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnSnapHelper).setOnClickListener(this);
         findViewById(R.id.btnItemTouchHelper).setOnClickListener(this);
         findViewById(R.id.btnItemAnimator).setOnClickListener(this);
+        findViewById(R.id.btnTreeList).setOnClickListener(this);
     }
 
     @Override
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btnItemAnimator:
                 type = AppConstant.item_animator;
+                break;
+            case R.id.btnTreeList:
+                startActivity(new Intent(this, TreeListShowActivity.class));
                 break;
         }
         if (type != null) {
